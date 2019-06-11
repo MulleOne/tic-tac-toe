@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
 
 function Square(props) {
     return (
@@ -86,12 +86,21 @@ class Game extends React.Component {
         });
     }
 
-    jumpTo(step) {
+    jumpTo = step => {
         this.setState({
             stepNumber: step,
             xIsNext: (step % 2) === 0,
         });
-    }
+    };
+
+    toggleButtonClass = (event) => {
+        let buttonList = document.getElementById("moves").getElementsByTagName("button");
+        let buttonArray = Array.prototype.slice.call(buttonList);
+        for (let i = 0; i < buttonArray.length; i++) {
+            buttonArray[i].classList.remove("bold-button")
+        }
+        event.target.classList.add("bold-button");
+    };
 
     render() {
         const history = this.state.history;
@@ -104,7 +113,7 @@ class Game extends React.Component {
                 "Go to game start";
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button onClick={(event) => {this.jumpTo(move); this.toggleButtonClass(event)}}>{desc}</button>
                 </li>
             );
         });
@@ -128,7 +137,7 @@ class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <ol id="moves">{moves}</ol>
                 </div>
             </div>
         );

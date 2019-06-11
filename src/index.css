@@ -48,3 +48,8 @@ ol, ul {
 .game-info {
   margin-left: 20px;
 }
+
+.bold-button {
+  border: solid black;
+  background-color: cornflowerblue;
+}
