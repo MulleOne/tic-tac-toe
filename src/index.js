@@ -12,32 +12,24 @@ class Board extends React.Component {
     renderSquare(i) {
         return (
             <Square
+                key={i}
                 value={this.props.squares[i]}
                 onClick={() => this.props.onClick(i)}
             />
         );
     }
-
     render() {
-        return (
-            <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
-            </div>
-        );
+        let rows = [];
+        let i = 0;
+        for (let m = 0; m < 3; m++) {
+            let columns = [];
+            for (let n = 0; n < 3; n++) {
+                columns.push(this.renderSquare(i));
+                i++;
+            }
+            rows.push(<div key={m} className="board-row">{columns}</div>);
+        }
+        return rows
     }
 }
 
@@ -54,8 +46,8 @@ class Game extends React.Component {
         };
     }
 
-    static coords(pos) {
-        let i = 0
+    static returnCoordinates(pos) {
+        let i = 0;
         for (let m = 0; m < 3; m++) {
             for (let n = 0; n < 3; n++) {
                 if (i === pos) {
@@ -79,7 +71,7 @@ class Game extends React.Component {
         this.setState({
             history: history.concat([{
                 squares: squares,
-                coordinates: Game.coords(i),
+                coordinates: Game.returnCoordinates(i),
             }]),
             stepNumber: history.length,
             xIsNext: !this.state.xIsNext,
@@ -113,7 +105,10 @@ class Game extends React.Component {
                 "Go to game start";
             return (
                 <li key={move}>
-                    <button onClick={(event) => {this.jumpTo(move); this.toggleButtonClass(event)}}>{desc}</button>
+                    <button onClick={(event) => {
+                        this.jumpTo(move);
+                        this.toggleButtonClass(event)
+                    }}>{desc}</button>
                 </li>
             );
         });
