@@ -18,6 +18,7 @@ class Board extends React.Component {
             />
         );
     }
+
     render() {
         let rows = [];
         let i = 0;
@@ -94,6 +95,15 @@ class Game extends React.Component {
         event.target.classList.add("bold-button");
     };
 
+    static toggleSortButton() {
+        const currentList = document.getElementById("moves").getElementsByTagName("li");
+        const reversedList = Array.prototype.slice.call(currentList).reverse();
+        // - 1 to leave out the first button that resets the game
+        for (let i = 0; i < reversedList.length - 1; i++) {
+            document.getElementById("moves").appendChild(reversedList[i]);
+        }
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
@@ -133,6 +143,9 @@ class Game extends React.Component {
                 <div className="game-info">
                     <div>{status}</div>
                     <ol id="moves">{moves}</ol>
+                </div>
+                <div className="sorting-section">
+                    <button onClick={() => {Game.toggleSortButton()}}>ReArrange List</button>
                 </div>
             </div>
         );
