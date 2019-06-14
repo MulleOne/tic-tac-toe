@@ -108,14 +108,14 @@ class Game extends React.Component {
 
     static highlightWinningSquares(lines) {
         const squareArray = Game.returnSquaresArray();
-        Game.removeWinningClass(squareArray);
+        Game.removeWinningSquaresClass(squareArray);
         for (let i = 0; i < lines.length; i++) {
-            squareArray[lines[i]].classList.add("winning")
+            squareArray[lines[i]].classList.add("winning-squares")
         }
     }
 
     static cleanUp() {
-        Game.removeWinningClass(Game.returnSquaresArray());
+        Game.removeWinningSquaresClass(Game.returnSquaresArray());
     }
 
     static returnSquaresArray() {
@@ -123,9 +123,9 @@ class Game extends React.Component {
         return Array.prototype.slice.call(buttonList);
     }
 
-    static removeWinningClass(array) {
+    static removeWinningSquaresClass(array) {
         for (let i = 0; i < array.length; i++) {
-            array[i].classList.remove("winning");
+            array[i].classList.remove("winning-squares");
         }
     }
 
