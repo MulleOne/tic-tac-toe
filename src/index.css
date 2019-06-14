@@ -53,3 +53,9 @@ ol, ul {
   border: solid black;
   background-color: cornflowerblue;
 }
+
+
+.winning {
+  background-color: forestgreen;
+  color: white;
+}

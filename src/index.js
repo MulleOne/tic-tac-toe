@@ -2,6 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
+const GO_TO_START = "Go to game start";
+
 function Square(props) {
     return (
         <button className="square" onClick={props.onClick}>{props.value}</button>
@@ -98,9 +100,32 @@ class Game extends React.Component {
     static toggleSortButton() {
         const currentList = document.getElementById("moves").getElementsByTagName("li");
         const reversedList = Array.prototype.slice.call(currentList).reverse();
-        // - 1 to leave out the first button that resets the game
+        // -1 to leave out the first button that resets the game
         for (let i = 0; i < reversedList.length - 1; i++) {
             document.getElementById("moves").appendChild(reversedList[i]);
+        }
+    }
+
+    static highlightWinningSquares(lines) {
+        const squareArray = Game.returnSquaresArray();
+        Game.removeWinningClass(squareArray);
+        for (let i = 0; i < lines.length; i++) {
+            squareArray[lines[i]].classList.add("winning")
+        }
+    }
+
+    static cleanUp() {
+        Game.removeWinningClass(Game.returnSquaresArray());
+    }
+
+    static returnSquaresArray() {
+        const buttonList = document.getElementsByClassName("square");
+        return Array.prototype.slice.call(buttonList);
+    }
+
+    static removeWinningClass(array) {
+        for (let i = 0; i < array.length; i++) {
+            array[i].classList.remove("winning");
         }
     }
 
@@ -112,12 +137,13 @@ class Game extends React.Component {
         const moves = history.map((step, move) => {
             const desc = move ?
                 "Go to move #" + move + " (Row :" + history[move].coordinates[0] + ", Column :" + history[move].coordinates[1] + ")" :
-                "Go to game start";
+                GO_TO_START;
             return (
                 <li key={move}>
                     <button onClick={(event) => {
                         this.jumpTo(move);
-                        this.toggleButtonClass(event)
+                        this.toggleButtonClass(event);
+                        Game.cleanUp();
                     }}>{desc}</button>
                 </li>
             );
@@ -145,7 +171,10 @@ class Game extends React.Component {
                     <ol id="moves">{moves}</ol>
                 </div>
                 <div className="sorting-section">
-                    <button onClick={() => {Game.toggleSortButton()}}>ReArrange List</button>
+                    <button onClick={() => {
+                        Game.toggleSortButton()
+                    }}>ReArrange List
+                    </button>
                 </div>
             </div>
         );
@@ -173,6 +202,7 @@ function calculateWinner(squares) {
     for (let i = 0; i < lines.length; i++) {
         const [a, b, c] = lines[i];
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+            Game.highlightWinningSquares(lines[i]);
             return squares[a];
         }
     }
